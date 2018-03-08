@@ -3,5 +3,6 @@
   become: true
   vars:
     project_tag: "lamp-test"
+    app_host: localhost
   roles:
     - role_under_test
