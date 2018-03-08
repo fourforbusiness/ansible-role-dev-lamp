@@ -4,4 +4,4 @@
   vars:
     project_tag: "lamp-test"
   roles:
-    - ffb.lamp
+    - role_under_test

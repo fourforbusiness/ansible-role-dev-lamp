@@ -1,0 +1,19 @@
+services: docker
+env:
+- distro: ubuntu1604
+- distro: ubuntu1404
+script:
+  # Configure test script so we can run extra tests after playbook is run.
+  - export container_id=$(date +%s)
+  - export cleanup=false
+
+  - wget -O ${PWD}/tests/test.sh https://gist.githubusercontent.com/geerlingguy/73ef1e5ee45d8694570f334be385e181/raw/
+
+  - chmod +x ${PWD}/tests/test.sh
+  - "${PWD}/tests/test.sh"
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/
+  slack:
+    rooms:
+      secure: CBmTnQ9Vvb8C7Jyid5FFaX6wF7aLJN9c30VupwkiQYAaXH5xE4samcPWXSu+OkKtOvpSqs3zVcSPryn8CE3UFeo9Y+u16FH0Ax92T7g4SCiGx4BQfsmKGmg3NVeLr9CUqdWcAcxxhUmD1s5YH7PgcGgy4bVqGyzQrMSyeAEIM1EuOnTO1SE0UGQzz7sF6wFZn1orRKFjHVEepISmyrMLKgocs5iqlmQ9rHx8JbAsIMGzx04ZlUmRbXQ8jVqSCBxcAA0pW+m/jz7C83DudKVqB8MPvqUfviGgX6xcnf8ohhU6AHJc2jyYQyoXwkw1hyiAUJ/X4RF22CUG6sBGxOq7cOFOLnlxNw4/nnUae5EqKRywTT1Y9dD8fX4FyC/c1laXCnon+YZ5Qzx48asolKHhwfyKi1XZ6VAD1/0D7jcPhZndPSoRiTVyOVAR/ZOrN9zVPTz6hUozRezJEeYqzcRS6U+a+gh5xLFU9pmNa3jyFnFu/uz56H2gtGlrZXG3BkVgbqjq0sdgSN5384ryscauiGPMJbWBApzbIkGfzWymCFXqoO6lFKjnmOjLICzvicHZnxa7H6Zyj391kJQUoYnWrRDAOjj/3sto4U5KNlV+Oz6ZQ2gDyswVzhX7aBThLv+gfpi/u5KdVAndDHLoPAZjDq62emifL5RTKx8DMdo2AOw=
