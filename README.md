@@ -1,4 +1,6 @@
-# Ansible Role: LAMP-Stack
+# Ansible Role: LAMP-Stack for Development
+
+[![Build Status](https://api.travis-ci.org/fourforbusiness/ansible-role-dev-lamp.svg?branch=master)](https://api.travis-ci.org/fourforbusiness/ansible-role-dev-lamp)
 
 Installs a simple LAMP-Stack for development-environments on the target machine.
 
