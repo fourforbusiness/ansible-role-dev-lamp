@@ -1,7 +1,11 @@
 services: docker
 env:
-- distro: ubuntu1604
-- distro: ubuntu1404
+  - distro: centos7
+  - distro: centos6
+  - distro: ubuntu1604
+  - distro: ubuntu1404
+  - distro: ubuntu1204
+  - distro: debian8
 script:
   # Configure test script so we can run extra tests after playbook is run.
   - export container_id=$(date +%s)
