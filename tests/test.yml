@@ -4,5 +4,6 @@
   vars:
     project_tag: "lamp-test"
     app_host: localhost
+    file_sync_type: manual
   roles:
     - role_under_test
