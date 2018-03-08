@@ -1,0 +1,64 @@
+project_tag: "project_tag_not_set"
+# --------------------------------
+# apache
+# --------------------------------
+www_root: "/var/www/"
+vhosts_root: "vhosts/"
+d_root: "{{ www_root }}{{ vhosts_root }}{{ project_tag }}"
+
+apache_remove_default_vhost: true
+apache_create_vhosts: true
+apache_vhosts_filename: "vhosts.conf"
+apache_vhosts_template: "vhosts.conf.j2"
+
+apache_listen_ip: "*"
+apache_listen_port: 80
+
+apache_vhosts:
+  - servername: "{{ ansible_fqdn }}"
+    serveradmin: "admin@localhost"
+    documentroot: "{{ d_root }}"
+    extra_parameters: |
+                  ProxyPassMatch ^/(.*\.php(/.*)?)$ "unix:{{ php_fpm_listen }}|fcgi://localhost{{ d_root }}"
+
+apache_allow_override: "All"
+apache_global_vhost_settings: |
+  DirectoryIndex index.php
+apache_options: "+Indexes"
+# --------------------------------
+# mysql
+# --------------------------------
+mysql_root_password: "{{ project_tag }}"
+mysql_enabled_on_startup: yes
+# use non strict mysql mode
+mysql_sql_mode: "  "
+mysql_packages:
+  - mysql-server
+  - mysql-client
+
+# --------------------------------
+# php
+# --------------------------------
+#PHP Base Settings
+php_memory_limit: "1024M"
+php_max_execution_time: "30"
+php_upload_max_filesize: "6M"
+#PHP Modules
+php_install_recommends: yes
+#PHP FPM
+php_enable_php_fpm: true
+php_fpm_listen: "/run/php/php{{ php_version }}-fpm.sock"
+php_fpm_listen_allowed_clients: "127.0.0.1"
+php_fpm_pool_user: 'www-data'
+#PHP APC
+php_enable_apc: true
+php_apc_shm_size: "96M"
+php_apc_enable_cli: "0"
+#PHP Xdebug
+php_xdebug_remote_enable: "true"
+php_xdebug_remote_connect_back: "true"
+php_xdebug_remote_host: "{{ app_host }}"
+php_xdebug_idekey: phpstorm.xdebug
+#PHP Opcache
+php_opcache_revalidate_freq: 0
+opcache.memory_consumption: 256

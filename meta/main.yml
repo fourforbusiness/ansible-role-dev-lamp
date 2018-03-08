@@ -1,0 +1,22 @@
+---
+allow_duplicates: false
+dependencies:
+  - { role: geerlingguy.apache }
+  - { role: geerlingguy.php-versions }
+  - { role: geerlingguy.php }
+  - { role: geerlingguy.php-mysql }
+  - { role: geerlingguy.php-xdebug }
+  - { role: geerlingguy.apache-php-fpm }
+  - { role: geerlingguy.mysql }
+  - { role: geerlingguy.blackfire }
+galaxy_info:
+  author: "4fb"
+  description: This role is a shortcut to get a simple LAMP-Stack with xDebug and blackfiore installed on our VMs
+  company: "four for business AG"
+  license: "license (BSD, MIT)"
+  min_ansible_version: 1.4
+  galaxy_tags:
+    - lamp
+    - php
+    - apache
+    - mysql

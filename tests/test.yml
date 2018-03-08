@@ -1,0 +1,7 @@
+---
+- hosts: all
+  become: true
+  vars:
+    project_tag: "lamp-test"
+  roles:
+    - ffb.lamp
