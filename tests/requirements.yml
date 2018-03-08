@@ -1,0 +1,9 @@
+---
+- src: geerlingguy.apache
+- src: geerlingguy.php-versions
+- src: geerlingguy.php
+- src: geerlingguy.php-mysql
+- src: geerlingguy.apache-php-fpm
+- src: geerlingguy.mysql
+- src: geerlingguy.php-xdebug
+- src: geerlingguy.blackfire
