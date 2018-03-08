@@ -1,3 +1,19 @@
+- name: Update apt cache.
+  apt: update_cache=yes cache_valid_time=600
+  when: ansible_os_family == 'Debian'
+
+- name: ensure sefacl and facl binaries are installed (Debian)
+  apt:
+    name: acl
+    state: present
+  when: ansible_os_family == 'Debian'
+  
+- name: ensure sefacl and facl binaries are installed (RedHat)
+  yum:
+    name: acl
+    state: present
+  when: ansible_os_family == 'RedHat'
+
 - name: Ensure www-directory exists and has correct access-rights
   become: true
   file:
