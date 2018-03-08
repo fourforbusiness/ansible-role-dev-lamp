@@ -48,4 +48,4 @@ MIT / BSD
 
 ## Author Information
 
-This role was created in 2018 by [four-for-business](https://www.4fb.de/).
+This role was created in 2018 by [four for business AG](https://www.4fb.de/).

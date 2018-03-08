@@ -1,0 +1,4 @@
+project_tag: project_tag_not_set
+www_root: "/var/www/"
+vhosts_root: "vhosts/"
+d_root: "{{ www_root }}{{ vhosts_root }}{{ project_tag }}"
