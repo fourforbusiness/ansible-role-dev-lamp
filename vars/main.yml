@@ -9,9 +9,6 @@ apache_vhosts_template: "vhosts.conf.j2"
 apache_listen_ip: "*"
 apache_listen_port: 80
 
-apache_mods_enabled:
-  - proxy.load
-
 apache_vhosts:
   - servername: "{{ ansible_fqdn }}"
     serveradmin: "admin@localhost"

@@ -1,9 +1,9 @@
 ---
 - hosts: all
   become: true
-  vars:
-    project_tag: "lamp-test"
-    app_host: localhost
-    file_sync_type: manual
+  pre_tasks:
+    - name: load all vars
+      include_vars:
+         file: 'tests/test_vars.yml'
   roles:
     - role_under_test
