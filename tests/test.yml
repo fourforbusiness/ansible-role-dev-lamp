@@ -4,6 +4,6 @@
   pre_tasks:
     - name: load all vars
       include_vars:
-         file: 'tests/test_vars.yml'
+         file: 'test_vars.yml'
   roles:
     - role_under_test
