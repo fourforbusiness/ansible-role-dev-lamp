@@ -11,6 +11,8 @@ This role will install a LAMP-Stack along with [X-Debug](https://xdebug.org/) an
 PHP will run via FPM.
 PHP can be installed in different Versions (see documentation of [geerlingguy.php-versions](https://galaxy.ansible.com/geerlingguy/php-versions/) for more details)
 
+If `lamp_prepare_doc_root` is set to `true` the role will create the document root for the project and automatically set rwx-permissions for the user executing ansible and the user executing php-fpm.
+
 ## Requirements
 
 Ubuntu 16.04
@@ -18,12 +20,13 @@ Ubuntu 16.04
 ## Role Variables
 
 Beside the variables of the dependencies this role has the following vars:
-* `project_tag` (name of the project, defaults to `project_tag_not_set` allowed characters AZaz_0-9)        
+* `project_tag` (name of the project, defaults to `project_tag_not_set` allowed characters AZaz.-_0-9)        
 This is used to do the following things by default:        
     * mysql root password
     * last part of the www-root for the project
 * `www_root`    (path of the www-root, defaults to `/var/www`)
 * `vhosts_root` (path to where the virtual hosts websites files will be stored, defaults to `/var/www/vhosts`)
+* `lamp_prepare_doc_root` (if the playbook should create the document root of the current project)
 
 ## Dependencies
 

@@ -1,6 +1,6 @@
 ---
 project_tag: "lamp-test"
 app_host: localhost
-file_sync_type: manual
 apache_mods_enabled:
   - proxy.load
+lamp_prepare_doc_root: true

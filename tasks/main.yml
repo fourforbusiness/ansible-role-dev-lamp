@@ -3,16 +3,9 @@
   when: ansible_os_family == 'Debian'
 
 - name: ensure sefacl and facl binaries are installed (Debian)
-  apt:
+  package:
     name: acl
     state: present
-  when: ansible_os_family == 'Debian'
-  
-- name: ensure sefacl and facl binaries are installed (RedHat)
-  yum:
-    name: acl
-    state: present
-  when: ansible_os_family == 'RedHat'
 
 - name: Ensure www-directory exists and has correct access-rights
   become: true
@@ -27,8 +20,8 @@
     - "{{ www_root }}"
     - "{{ apache_vhosts[0].documentroot }}"
   when:
-    - file_sync_type is defined
-    - file_sync_type == 'manual'
+    - lamp_prepare_doc_root is defined
+    - lamp_prepare_doc_root
   register: www_dir_state
 
 - name: Set www-directory current ACL
