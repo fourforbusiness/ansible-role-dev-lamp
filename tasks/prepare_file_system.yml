@@ -22,7 +22,7 @@
   
 - name: Set www-directory current ACL
   become: true
-  shell: "setfacl -R -m u:{{ php_fpm_pool_user }}:rwX -m u:{{ lookup('pipe', 'whoami') }}:rwX {{ item.documentroot }} }}"
+  shell: "setfacl -R -m u:{{ php_fpm_pool_user }}:rwX -m u:{{ lookup('pipe', 'whoami') }}:rwX {{ item.documentroot }}"
   with_items: "{{ apache_vhosts }}"
   when:
     - www_dir_state.changed
