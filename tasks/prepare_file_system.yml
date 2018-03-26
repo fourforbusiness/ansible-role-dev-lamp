@@ -1,0 +1,38 @@
+- name: Update apt cache.
+  apt: update_cache=yes cache_valid_time=600
+  when: ansible_os_family == 'Debian'
+
+- name: ensure sefacl and facl binaries are installed (Debian)
+  package:
+    name: acl
+    state: present
+
+- name: Ensure www-directory exists and has correct access-rights
+  become: true
+  file:
+    path: "{{ item }}"
+    owner: "{{ php_fpm_pool_user }}"
+    group: "{{ lookup('pipe', 'whoami') }}"
+    mode: "u=rwx,g=rwx,o=r"
+    state: directory
+    recurse: true
+  with_items:
+    - "{{ www_root }}"
+    - "{{ apache_vhosts[0].documentroot }}"
+  register: www_dir_state
+
+- name: Set www-directory current ACL
+  become: true
+  shell: "setfacl -R -m u:{{ php_fpm_pool_user }}:rwX -m u:{{ lookup('pipe', 'whoami') }}:rwX {{ item }}"
+  with_items:
+    - ["{{ www_root }}", "{{ apache_vhosts[0].documentroot }}"]
+  when:
+    - www_dir_state.changed
+
+- name: Set www-directory default ACL
+  become: true
+  shell: "setfacl -dR -m u:{{ php_fpm_pool_user }}:rwX -m u:{{ lookup('pipe', 'whoami') }}:rwX {{ item }}"
+  with_items:
+    - ["{{ www_root }}", "{{ apache_vhosts[0].documentroot }}"]
+  when:
+    - www_dir_state.changed
