@@ -16,20 +16,20 @@
     mode: "u=rwx,g=rwx,o=r"
     state: directory
     recurse: true
-  with_items: apache_vhosts
+  with_items: "{{ apache_vhosts }}"
   register: www_dir_state
   when: apache_vhosts | length > 0
   
 - name: Set www-directory current ACL
   become: true
   shell: "setfacl -R -m u:{{ php_fpm_pool_user }}:rwX -m u:{{ lookup('pipe', 'whoami') }}:rwX {{ item.documentroot }} }}"
-  with_items: apache_vhosts
+  with_items: "{{ apache_vhosts }}"
   when:
     - www_dir_state.changed
 
 - name: Set www-directory default ACL
   become: true
   shell: "setfacl -dR -m u:{{ php_fpm_pool_user }}:rwX -m u:{{ lookup('pipe', 'whoami') }}:rwX {{ item.documentroot }}"
-  with_items: apache_vhosts
+  with_items: "{{ apache_vhosts }}"
   when:
     - www_dir_state.changed
