@@ -1,4 +1,6 @@
 - name: prepare filesystem after provisioning
+  shell: 'echo fake_action'
+  changed_when: true
   notify: prepare filesystem
   when:     
     - lamp_prepare_doc_root is defined
