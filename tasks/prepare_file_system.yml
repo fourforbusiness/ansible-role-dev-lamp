@@ -10,29 +10,28 @@
 - name: Ensure www-directory exists and has correct access-rights
   become: true
   file:
-    path: "{{ item }}"
+    path: "{{ item.documentroot }}"
     owner: "{{ php_fpm_pool_user }}"
     group: "{{ lookup('pipe', 'whoami') }}"
     mode: "u=rwx,g=rwx,o=r"
     state: directory
     recurse: true
-  with_items:
-    - "{{ www_root }}"
-    - "{{ apache_vhosts[0].documentroot }}"
+  with_items
+    - "{{ apache_vhosts }}"
   register: www_dir_state
 
 - name: Set www-directory current ACL
   become: true
-  shell: "setfacl -R -m u:{{ php_fpm_pool_user }}:rwX -m u:{{ lookup('pipe', 'whoami') }}:rwX {{ item }}"
+  shell: "setfacl -R -m u:{{ php_fpm_pool_user }}:rwX -m u:{{ lookup('pipe', 'whoami') }}:rwX {{ item.documentroot }} }}"
   with_items:
-    - ["{{ www_root }}", "{{ apache_vhosts[0].documentroot }}"]
+    - "{{ apache_vhosts }}"
   when:
     - www_dir_state.changed
 
 - name: Set www-directory default ACL
   become: true
-  shell: "setfacl -dR -m u:{{ php_fpm_pool_user }}:rwX -m u:{{ lookup('pipe', 'whoami') }}:rwX {{ item }}"
+  shell: "setfacl -dR -m u:{{ php_fpm_pool_user }}:rwX -m u:{{ lookup('pipe', 'whoami') }}:rwX {{ item.documentroot }}"
   with_items:
-    - ["{{ www_root }}", "{{ apache_vhosts[0].documentroot }}"]
+    - "{{ apache_vhosts }}"
   when:
     - www_dir_state.changed
