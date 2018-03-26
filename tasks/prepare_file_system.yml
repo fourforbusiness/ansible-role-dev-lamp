@@ -7,7 +7,7 @@
     name: acl
     state: present
 
-- name: Ensure www-directory exists and has correct access-rights
+- name: Ensure documentroots exist and have correct access-rights
   become: true
   file:
     path: "{{ item.documentroot }}"
@@ -17,19 +17,19 @@
     state: directory
     recurse: true
   with_items: "{{ apache_vhosts }}"
-  register: www_dir_state
+  register: doc_root_state
   when: apache_vhosts | length > 0
   
-- name: Set www-directory current ACL
+- name: Set documentroots current ACLs
   become: true
   shell: "setfacl -R -m u:{{ php_fpm_pool_user }}:rwX -m u:{{ lookup('pipe', 'whoami') }}:rwX {{ item.documentroot }}"
   with_items: "{{ apache_vhosts }}"
   when:
-    - www_dir_state.changed
+    - doc_root_state.changed
 
-- name: Set www-directory default ACL
+- name: Set documentroots default ACLs
   become: true
   shell: "setfacl -dR -m u:{{ php_fpm_pool_user }}:rwX -m u:{{ lookup('pipe', 'whoami') }}:rwX {{ item.documentroot }}"
   with_items: "{{ apache_vhosts }}"
   when:
-    - www_dir_state.changed
+    - doc_root_state.changed
