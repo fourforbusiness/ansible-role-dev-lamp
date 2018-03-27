@@ -1,19 +1,20 @@
-- name: Update apt cache.
-  apt: update_cache=yes cache_valid_time=600
+- name: Update apt cache
+  apt: update_cache=yes cache_valid_time=36000
   when: ansible_os_family == 'Debian'
+  changed_when: false
 
-- name: ensure sefacl and facl binaries are installed (Debian)
+- name: Ensure sefacl and facl binaries are installed (Debian)
   package:
     name: acl
     state: present
 
-- name: Ensure documentroots exist and have correct access-rights
+- name: Ensure www-directory exists and has correct access-rights
   become: true
   file:
     path: "{{ item.documentroot }}"
     owner: "{{ php_fpm_pool_user }}"
     group: "{{ lookup('pipe', 'whoami') }}"
-    mode: "u=rwx,g=rwx,o=r"
+    mode: "u=rwx,g=rwx,o=r--"
     state: directory
     recurse: true
   with_items: "{{ apache_vhosts }}"
@@ -22,14 +23,58 @@
   
 - name: Set documentroots current ACLs
   become: true
-  shell: "setfacl -R -m u:{{ php_fpm_pool_user }}:rwX -m u:{{ lookup('pipe', 'whoami') }}:rwX {{ item.documentroot }}"
+  acl:
+    path: "{{ item.documentroot }}"
+    entity: "{{ lookup('pipe', 'whoami') }}"
+    etype: user
+    state: present
+    permissions: rwx
+    recursive: true
   with_items: "{{ apache_vhosts }}"
+  no_log: true
+  when:
+    - doc_root_state.changed  
+    
+- name: Set documentroots current ACLs
+  become: true
+  acl:
+    path: "{{ item.documentroot }}"
+    entity: "{{ php_fpm_pool_user }}"
+    etype: user
+    state: present
+    permissions: rwx
+    recursive: true
+  with_items: "{{ apache_vhosts }}"
+  no_log: true
   when:
     - doc_root_state.changed
-
+  
 - name: Set documentroots default ACLs
   become: true
-  shell: "setfacl -dR -m u:{{ php_fpm_pool_user }}:rwX -m u:{{ lookup('pipe', 'whoami') }}:rwX {{ item.documentroot }}"
+  acl:
+    path: "{{ item.documentroot }}"
+    entity: "{{ lookup('pipe', 'whoami') }}"
+    etype: user
+    state: present
+    permissions: rwx
+    default: true
+    recursive: true
   with_items: "{{ apache_vhosts }}"
+  no_log: true
+  when:
+    - doc_root_state.changed  
+    
+- name: Set documentroots default ACLs
+  become: true
+  acl:
+    path: "{{ item.documentroot }}"
+    entity: "{{ php_fpm_pool_user }}"
+    etype: user
+    state: present
+    permissions: rwx
+    default: true
+    recursive: true
+  with_items: "{{ apache_vhosts }}"
+  no_log: true
   when:
     - doc_root_state.changed

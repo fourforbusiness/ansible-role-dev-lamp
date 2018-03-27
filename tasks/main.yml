@@ -1,2 +1,5 @@
----
-- include_tasks: prepare_file_system.yml
+- name: set doc_root file permissions after installing lamp
+  include_tasks: prepare_file_system.yml
+  when:
+    - lamp_prepare_doc_root is defined
+    - lamp_prepare_doc_root
