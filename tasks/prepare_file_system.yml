@@ -11,70 +11,56 @@
 - name: Ensure www-directory exists and has correct access-rights
   become: true
   file:
-    path: "{{ item.documentroot }}"
+    path: "/var/www"
     owner: "{{ php_fpm_pool_user }}"
     group: "{{ lookup('pipe', 'whoami') }}"
     mode: "u=rwx,g=rwx,o=r--"
     state: directory
     recurse: true
-  with_items: "{{ apache_vhosts }}"
-  register: doc_root_state
-  when: "{{ apache_vhosts | length > 0 }}"
+  no_log: true
   
 - name: Set documentroots current ACLs
   become: true
   acl:
-    path: "{{ item.documentroot }}"
+    path: "/var/www"
     entity: "{{ lookup('pipe', 'whoami') }}"
     etype: user
     state: present
     permissions: rwx
     recursive: true
-  with_items: "{{ apache_vhosts }}"
   no_log: true
-  when:
-    - doc_root_state.changed  
     
 - name: Set documentroots current ACLs
   become: true
   acl:
-    path: "{{ item.documentroot }}"
+    path: "/var/www"
     entity: "{{ php_fpm_pool_user }}"
     etype: user
     state: present
     permissions: rwx
     recursive: true
-  with_items: "{{ apache_vhosts }}"
   no_log: true
-  when:
-    - doc_root_state.changed
   
-- name: Set documentroots default ACLs
+- name: Set documentroots default ACLs for logged in user
   become: true
   acl:
-    path: "{{ item.documentroot }}"
+    path: "/var/www"
     entity: "{{ lookup('pipe', 'whoami') }}"
     etype: user
     state: present
     permissions: rwx
     default: true
     recursive: true
-  with_items: "{{ apache_vhosts }}"
   no_log: true
-  when:
-    - doc_root_state.changed  
     
-- name: Set documentroots default ACLs
+- name: Set documentroots default ACLs for PHP-FPM user
   become: true
   acl:
-    path: "{{ item.documentroot }}"
+    path: "/var/www"
     entity: "{{ php_fpm_pool_user }}"
     etype: user
     state: present
     permissions: rwx
     default: true
     recursive: true
-  with_items: "{{ apache_vhosts }}"
   no_log: true
-  when:
-    - doc_root_state.changed
