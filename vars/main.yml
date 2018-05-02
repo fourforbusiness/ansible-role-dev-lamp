@@ -58,3 +58,7 @@ php_xdebug_idekey: phpstorm.xdebug
 #PHP Opcache
 php_opcache_revalidate_freq: 0
 opcache.memory_consumption: 256
+# --------------------------------
+# blackfire
+# --------------------------------
+blackfire_gpg_key_url: 'https://packagecloud.io/gpg.key'
