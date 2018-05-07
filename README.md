@@ -1,6 +1,6 @@
 # Ansible Role: LAMP-Stack for Development
 
-[![Build Status](https://api.travis-ci.org/fourforbusiness/ansible-role-dev-lamp.svg?branch=master)](https://api.travis-ci.org/fourforbusiness/ansible-role-dev-lamp)
+[![Build Status](https://api.travis-ci.org/fourforbusiness/ansible-role-dev-lamp.svg?branch=master)](https://api.travis-ci.org/fourforbusiness/ansible-role-dev-lamp)  [![Ansible-Galaxy](https://img.shields.io/ansible/role/24293.svg)](https://galaxy.ansible.com/fourforbusiness/dev-lamp/) ![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)
 
 Installs a simple LAMP-Stack for development-environments on the target machine.
 
