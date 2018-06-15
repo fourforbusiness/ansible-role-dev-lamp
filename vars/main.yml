@@ -1,26 +1,33 @@
 ---
 # --------------------------------
-# apache
+# nginx
 # --------------------------------
-apache_remove_default_vhost: true
-apache_create_vhosts: true
-apache_vhosts_filename: "vhosts.conf"
-apache_vhosts_template: "vhosts.conf.j2"
+nginx_remove_default_vhost: true
 
-apache_listen_ip: "*"
-apache_listen_port: 80
+nginx_error_log: "/var/log/nginx/error.log warn"
+nginx_access_log: "/var/log/nginx/access.log main buffer=16k"
+nginx_server_tokens: "off"
 
-apache_vhosts:
-  - servername: "{{ ansible_fqdn }}"
-    serveradmin: "admin@localhost"
-    documentroot: "{{ d_root }}"
+nginx_vhosts:
+  - listen: "80"
+    server_name: "{{ ansible_fqdn }} www.{{ ansible_fqdn }}"
+    server_name_redirect: "{{ ansible_fqdn }}"
+    root: "{{ d_root }}"
+    index: "index.php"
+    error_page: ""
+    access_log: ""
+    error_log: ""
+    state: "present"
+    template: "{{ nginx_vhost_template }}"
+    filename: "{{ ansible_fqdn }}.conf"
     extra_parameters: |
-                  ProxyPassMatch ^/(.*\.php(/.*)?)$ "unix:{{ php_fpm_listen }}|fcgi://localhost{{ d_root }}"
+      location ~ \.php$ {
+          fastcgi_split_path_info ^(.+\.php)(/.+)$;
+          fastcgi_pass unix:/var/run/php5-fpm.sock;
+          fastcgi_index index.php;
+      }
+#ProxyPassMatch ^/(.*\.php(/.*)?)$ "unix:{{ php_fpm_listen }}|fcgi://localhost{{ d_root }}"
 
-apache_allow_override: "All"
-apache_global_vhost_settings: |
-  DirectoryIndex index.php
-apache_options: "+Indexes"
 # --------------------------------
 # mysql
 # --------------------------------
@@ -35,6 +42,7 @@ mysql_packages:
 # --------------------------------
 # php
 # --------------------------------
+php_version: '7.1'
 #PHP Base Settings
 php_memory_limit: "1024M"
 php_max_execution_time: "30"
@@ -62,3 +70,10 @@ opcache.memory_consumption: 256
 # blackfire
 # --------------------------------
 blackfire_gpg_key_url: 'https://packagecloud.io/gpg.key'
+
+# --------------------------------
+# nodejs
+# --------------------------------
+nodejs_npm_global_packages:
+  - name: grunt
+  - name: yarn
