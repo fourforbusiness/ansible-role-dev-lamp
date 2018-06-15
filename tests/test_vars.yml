@@ -1,6 +1,4 @@
 ---
-project_tag: "lamp-test"
+project_tag: "lnmp-test"
 app_host: localhost
-apache_mods_enabled:
-  - proxy.load
-lamp_prepare_doc_root: true
+lnmp_prepare_doc_root: true
