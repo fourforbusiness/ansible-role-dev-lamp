@@ -7,60 +7,63 @@
   package:
     name: acl
     state: present
-
+    
+- name: Ensure document-root exists and has correct access-rights
+  become: true
+  file:
+    path: "{{ d_root }}"
+    state: directory
+    
 - name: Ensure www-directory exists and has correct access-rights
   become: true
   file:
-    path: "/var/www"
+    path: "{{ www_root }}"
     owner: "{{ php_fpm_pool_user }}"
     group: "{{ lookup('pipe', 'whoami') }}"
     mode: "u=rwx,g=rwx,o=r--"
     state: directory
     recurse: true
-  no_log: true
   
 - name: Set documentroots current ACLs
   become: true
   acl:
-    path: "/var/www"
+    path: "{{ www_root }}"
     entity: "{{ lookup('pipe', 'whoami') }}"
     etype: user
     state: present
     permissions: rwx
     recursive: true
-  no_log: true
     
 - name: Set documentroots current ACLs
   become: true
   acl:
-    path: "/var/www"
+    path: "{{ www_root }}"
     entity: "{{ php_fpm_pool_user }}"
     etype: user
     state: present
     permissions: rwx
     recursive: true
-  no_log: true
   
 - name: Set documentroots default ACLs for logged in user
   become: true
   acl:
-    path: "/var/www"
+    path: "{{ www_root }}"
     entity: "{{ lookup('pipe', 'whoami') }}"
     etype: user
     state: present
     permissions: rwx
     default: true
     recursive: true
-  no_log: true
     
 - name: Set documentroots default ACLs for PHP-FPM user
   become: true
   acl:
-    path: "/var/www"
+    path: "{{ www_root }}"
     entity: "{{ php_fpm_pool_user }}"
     etype: user
     state: present
     permissions: rwx
     default: true
     recursive: true
-  no_log: true
+  
+  
