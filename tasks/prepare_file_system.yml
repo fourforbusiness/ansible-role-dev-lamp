@@ -11,7 +11,7 @@
 - name: Ensure www-directory exists and has correct access-rights
   become: true
   file:
-    path: "{{ d_root }}"
+    path: "/var/www"
     owner: "{{ php_fpm_pool_user }}"
     group: "{{ lookup('pipe', 'whoami') }}"
     mode: "u=rwx,g=rwx,o=r--"
@@ -22,7 +22,7 @@
 - name: Set documentroots current ACLs
   become: true
   acl:
-    path: "{{ d_root }}"
+    path: "/var/www"
     entity: "{{ lookup('pipe', 'whoami') }}"
     etype: user
     state: present
@@ -33,7 +33,7 @@
 - name: Set documentroots current ACLs
   become: true
   acl:
-    path: "{{ d_root }}"
+    path: "/var/www"
     entity: "{{ php_fpm_pool_user }}"
     etype: user
     state: present
@@ -44,7 +44,7 @@
 - name: Set documentroots default ACLs for logged in user
   become: true
   acl:
-    path: "{{ d_root }}"
+    path: "/var/www"
     entity: "{{ lookup('pipe', 'whoami') }}"
     etype: user
     state: present
@@ -56,7 +56,7 @@
 - name: Set documentroots default ACLs for PHP-FPM user
   become: true
   acl:
-    path: "{{ d_root }}"
+    path: "/var/www"
     entity: "{{ php_fpm_pool_user }}"
     etype: user
     state: present
